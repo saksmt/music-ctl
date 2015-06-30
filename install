@@ -1,0 +1,60 @@
+#!/bin/bash
+
+if [[ "$UID" != "0" ]]; then
+    echo "You need to run this as root!"
+    exit -1
+fi
+
+cacheDir=''
+logDir=''
+dbDir=''
+binDir=''
+libDir=''
+
+if [[ "$INSTALLATION_PREFIX" != "" ]]; then
+    cacheDir=$INSTALLATION_PREFIX/cache/musicCtl
+    logDir=$INSTALLATION_PREFIX/log/musicCtl
+    dbDir=$INSTALLATION_PREFIX/share/musicCtl
+    libDir=$INSTALLATION_PREFIX/lib/music-ctl
+    binDir=$INSTALLATION_PREFIX/bin
+else
+    cacheDir=/var/cache/musicCtl
+    logDir=/var/log/musicCtl
+    dbDir=/usr/share/musicCtl
+    libDir=/usr/lib/music-ctl
+    binDir=/usr/local/bin
+fi
+
+if ! [[ -d $dbDir ]]; then
+    mkdir $dbDir
+    mkdir $logDir
+    mkdir $cacheDir
+    mkdir $libDir
+fi
+
+if [[ "$(cat /etc/group | grep 'music-ctl')" == "" ]]; then
+    groupadd music-ctl
+    chown :music-ctl {$dbDir,$logDir,$cacheDir,$libDir} -R
+    chmod g+rw {$dbDir,$logDir,$cacheDir,$libDir} -R
+    setfacl -d -m g::rw {$dbDir,$logDir,$cacheDir,$libDir}
+fi
+
+if [[ "$1" == "rebuild-vendor" ]] || [[ ! -f 'vendors.phar' ]]; then
+    composer update
+    cd sources
+    composer update
+    cd ..
+    patch -p0 -i ./DoctrineBridge-fix.patch
+    ./createPhar --rebuild-vendor --lib="$libDir" --cache="$cacheDir" --log="$logDir"  --db="$dbDir"
+    chmod +x vendors.phar
+    cp vendors.phar $libDir
+else
+    ./createPhar --lib="$libDir" --cache="$cacheDir" --log="$logDir" --db="$dbDir"
+fi
+
+chmod +x musicCtl.phar
+cp musicCtl.phar $libDir/self.phar
+ln -s $libDir/self.phar $binDir/music-ctl
+$libDir/self.phar cache:clear
+$binDir/music-ctl doctrine:database:create
+$binDir/music-ctl doctrine:schema:update --force

@@ -1,0 +1,23 @@
+#<smt_mpdmpc:config>
+#    <smt_mpdmpc:configuration id="default" />
+#</smt_mpdmpc:config>
+#<smt_tracktags:config>
+#    <smt_tracktags:factory target="AppBundle\Entity\Track" />
+#    <smt_tracktags:provider default="mpc" />
+#</smt_tracktags:config>
+
+smt_mpd_mpc:
+  configuration:
+    id: default
+
+smt_track_tags:
+  factory:
+    target: AppBundle\Entity\Track
+  provider:
+    default: mpc
+
+app:
+  mpd:
+    host: %mpd.host%
+    port: %mpd.port%
+    password: %mpd.password%

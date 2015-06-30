@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:framework="http://symfony.com/schema/dic/symfony"
+           xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd
+        http://symfony.com/schema/dic/symfony
+        http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+    <imports>
+        <import resource="parameters.php" />
+        <import resource="user.parameters.yml" />
+        <import resource="database.xml" />
+        <import resource="config.yml" />
+    </imports>
+    <framework:config secret="%secret%">
+        <framework:translator fallback="%locale%" enabled="true" />
+        <framework:fragments enabled="true" />
+    </framework:config>
+    <doctrine:config>
+        <doctrine:dbal
+            driver="%database_driver%"
+            path="%database_path%"
+            charset="UTF8"/>
+        <doctrine:orm
+            auto-mapping="true"
+            auto-generate-proxy-classes="%kernel.debug%" />
+    </doctrine:config>
+</container>

@@ -1,0 +1,8 @@
+{
+  "name": "Music-ctl loader package helper",
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  }
+}

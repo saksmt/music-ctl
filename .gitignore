@@ -1,0 +1,8 @@
+/vendor
+/composer.lock
+/createPhar.log
+/music-ctl.phar
+/musicCtl.phar
+/vendors.phar
+/sources/app/config/user.parameters.yml
+/sources/vendor

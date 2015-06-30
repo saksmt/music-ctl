@@ -1,0 +1,70 @@
+#!/usr/bin/env php
+<?php
+
+global $stripPath;
+
+function addDir($dir, Phar $phar) {
+    global $stripPath;
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+    foreach ($iterator as $file) {
+        /** @var SplFileInfo $file */
+        if (!$file->isDir()) {
+            $phar->addFile($file->getPath() . '/' . $file->getFilename(), substr($file->getPath(), $stripPath)  . '/' . $file->getFilename());
+        }
+    }
+
+}
+
+$compressionEnabled = count(getopt('c', ['compression']));
+$compressionEnabled = isset($compressionEnabled[0]);
+$rebuildVendors = count(getopt('r', ['rebuild', 'rebuild-vendors', 'rebuild-vendor']));
+
+$libDir = array_values(getopt('l:', ['lib:', 'lib-dir:']))[0];
+$cacheDir = array_values(getopt('C:', ['cache:', 'cache-dir:']))[0];
+$logDir = array_values(getopt('L:', ['log:', 'log-dir:']))[0];
+$dbDir = array_values(getopt('d:', ['db:', 'db-dir:']))[0];
+
+$map = file('phar.map');
+
+if (file_exists('musicCtl.phar')) {
+    `rm musicCtl.phar`;
+}
+
+if (file_exists('vendors.phar') && $rebuildVendors) {
+    `rm vendors.phar`;
+}
+
+$sources = new Phar('musicCtl.phar');
+$stripPath = strlen(__DIR__ . '/sources');
+
+foreach ($map as $element) {
+    $element = __DIR__ . '/' . trim($element);
+    addDir($element, $sources);
+}
+
+$stripPath = strlen(__DIR__);
+
+if ($rebuildVendors) {
+    $vendors = new Phar('vendors.phar');
+    addDir(__DIR__ . '/vendor/', $vendors);
+    $vendors->setStub($vendors->createDefaultStub('vendor/autoload.php'));
+    if ($compressionEnabled) {
+        $vendors->compressFiles(Phar::GZ);
+    }
+}
+
+$sources->addFile('runner.php');
+$sources->setStub(
+    '#!/usr/bin/env php' . PHP_EOL .
+    sprintf(
+        '<?php class Paths { const LIB = \'%s\'; const CACHE=\'%s\'; const LOG = \'%s\'; const DB = \'%s\'; } ?>',
+        $libDir,
+        $cacheDir,
+        $logDir,
+        $dbDir
+    ) . PHP_EOL .
+    $sources->createDefaultStub('runner.php')
+);
+if ($compressionEnabled) {
+    $sources->compressFiles(Phar::GZ);
+}

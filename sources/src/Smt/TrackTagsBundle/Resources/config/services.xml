@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="smt.track_tags_bundle.track_factory.target">Smt\TrackTagsBundle\Entity\StubTrackCollection</parameter>
+        <parameter key="smt.track_tags_bundle.track_factory.class">Smt\TrackTagsBundle\Factory\DefaultTrackTagsCollectionFactory</parameter>
+    </parameters>
+    <services>
+        <service class="%smt.track_tags_bundle.track_factory.class%" id="track.factory">
+            <argument>%smt.track_tags_bundle.track_factory.target%</argument>
+        </service>
+    </services>
+</container>
