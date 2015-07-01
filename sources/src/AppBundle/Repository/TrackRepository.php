@@ -14,6 +14,18 @@ class TrackRepository extends EntityRepository
             ->setFirstResult(($page - 1) * $limit)
             ->orderBy('t.rating', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
+    }
+
+    public function findUnsaved()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.saved = 1')
+            ->orderBy('t.rating', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

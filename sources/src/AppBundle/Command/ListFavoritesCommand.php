@@ -4,11 +4,14 @@ namespace AppBundle\Command;
 
 use AppBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
+use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class ListFavoritesCommand extends ContainerAwareCommand
 {
@@ -20,7 +23,7 @@ class ListFavoritesCommand extends ContainerAwareCommand
             ->addOption('page', 'p', InputOption::VALUE_REQUIRED, 'Page number.', 1)
             ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Limit of rows.', 5)
             // s - skip, a - accept (set saved), e - exit
-            ->addOption('save-mode', null, InputOption::VALUE_NONE, 'Display only "unsaved" favorites one-by-one.')
+            ->addOption('save-mode', null, InputOption::VALUE_NONE, 'Display only "unsaved" favorites one-by-one with editing functionality.')
             ->addOption('display-saved', 'S', InputOption::VALUE_NONE, 'Display "saved" properties.')
             ->addOption('path', 'P', InputOption::VALUE_NONE, 'Display paths.')
             ->addOption('rating', 'r', InputOption::VALUE_NONE, 'Display ratings.')
@@ -84,6 +87,31 @@ class ListFavoritesCommand extends ContainerAwareCommand
 
     private function runSaveMode(InputInterface $in, OutputInterface $out)
     {
-        $out->writeln('Not implemented yet...');
+        /** @var ObjectManager $em */
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $repo = $em->getRepository('AppBundle:Track');
+        /** @var Track[] $tracks */
+        $tracks = $repo->findUnsaved();
+        $formatter = new DefaultTrackFormatter();
+        $formatter->setFormat('%artist [%album] - %t (%f)');
+        $questionHelper = new QuestionHelper();
+        // n - skip, s - accept (set saved), e - exit
+        $saved = 0;
+        foreach ($tracks as $track) {
+            $question = new ChoiceQuestion($formatter->format($track), ['n' => 'Next', 's' => 'Save', 'e' => 'Exit'], 'n');
+            $answer = $questionHelper->ask($in, $out, $question);
+            if ($answer == 's') {
+                $em->persist($track->save());
+                $saved++;
+            } elseif ($answer == 'e') {
+                break;
+            }
+        }
+        $em->flush();
+        $total = count($tracks);
+        $out->write(sprintf('Saved <info>%d</info>, Skipped <info>%d</info>, Total: <info>%d</info>',
+            $saved,
+            $total - $saved,
+            $total));
     }
 }
