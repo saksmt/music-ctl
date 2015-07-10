@@ -1,4 +1,4 @@
-mpd:
-  host: localhost
-  port: 6600
-  password: ~
+parameters:
+  mpd.host: localhost
+  mpd.port: 6600
+  mpd.password: ~
