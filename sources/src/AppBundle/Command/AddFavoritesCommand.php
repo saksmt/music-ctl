@@ -32,6 +32,8 @@ class AddFavoritesCommand extends ContainerAwareCommand
                 ' %path, %file, %p, %f - Path to file',
                 '%artist [%album] - %t'
             )
+            ->addOption('vote-up-text', null, InputOption::VALUE_REQUIRED, 'Text to write on voteUp.', 'Successfully voted up "%s". Now rating is %d!')
+            ->addOption('added-text', null, InputOption::VALUE_REQUIRED, 'Text to write when added to favorites.', 'Successfully added "%s"!')
         ;
     }
 
@@ -59,7 +61,7 @@ class AddFavoritesCommand extends ContainerAwareCommand
                 $found->voteUp();
                 $em->persist($found);
                 $em->flush();
-                $out->writeln(sprintf('<info>Successfully voted up "%s". Now rating is %d!</info>',
+                $out->writeln(sprintf('<info>' . $in->getOption('vote-up-text') . '</info>',
                     $formatter->format($found), $found->getRating()+1));
                 return;
             } else {
@@ -68,6 +70,6 @@ class AddFavoritesCommand extends ContainerAwareCommand
         }
         $em->persist($track);
         $em->flush();
-        $out->writeln(sprintf('<info>Successfully added "%s"!</info>', $formatter->format($track)));
+        $out->writeln(sprintf('<info>' . $in->getOption('added-text') . '</info>', $formatter->format($track)));
     }
 }
