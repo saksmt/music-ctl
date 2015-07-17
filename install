@@ -40,9 +40,18 @@ if [[ "$(cat /etc/group | grep 'music-ctl')" == "" ]]; then
 fi
 
 if [[ "$1" == "rebuild-vendor" ]] || [[ ! -f 'vendors.phar' ]]; then
-    composer update
+    composer="composer"
+    if [[ "$(which composer) | grep -o 'not found'" != "" ]]; then
+        if [[ "$(which curl) | grep -o 'not found'" != "" ]]; then
+            wget -qO- http://getcomposer.org/installer | php
+        else
+            curl -Ss http://getcomposer.org/installer | php
+        fi
+        composer=$PWD"/composer.phar"
+    fi
+    $composer -o update
     cd sources
-    composer update
+    $composer -o update
     cd ..
     patch -p0 -i ./DoctrineBridge-fix.patch
     ./createPhar --rebuild-vendor --lib="$libDir" --cache="$cacheDir" --log="$logDir"  --db="$dbDir"
@@ -54,7 +63,9 @@ fi
 
 chmod +x musicCtl.phar
 cp musicCtl.phar $libDir/self.phar
-ln -s $libDir/self.phar $binDir/music-ctl
+if [[ -n $binDir/music-ctl ]]; then
+    ln -s $libDir/self.phar $binDir/music-ctl
+fi
 $libDir/self.phar cache:clear
 $binDir/music-ctl doctrine:database:create
 $binDir/music-ctl doctrine:schema:update --force
