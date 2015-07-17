@@ -2,6 +2,7 @@
 
 namespace AppBundle\Stream;
 
+use AppBundle\Stream\Exception\StreamNotWritableException;
 use SplFileInfo;
 
 class FileStream extends AbstractStream
@@ -14,7 +15,7 @@ class FileStream extends AbstractStream
     /**
      * @param \SplFileObject $file
      */
-    private function __construct(\SplFileObject $file)
+    public function __construct(\SplFileObject $file)
     {
         $this->file = $file;
     }
@@ -22,7 +23,7 @@ class FileStream extends AbstractStream
     /**
      * @param string $filename
      * @return FileStream
-     * @throws StreamNotWritebleException
+     * @throws StreamNotWritableException
      */
     public static function fromFilename($filename)
     {
@@ -31,26 +32,31 @@ class FileStream extends AbstractStream
     }
 
     /**
-     * @param $file
+     * @param SplFileInfo $file
      * @return FileStream
-     * @throws StreamNotWritebleException
+     * @throws StreamNotWritableException
      */
     public static function fromFileInfo(SplFileInfo $file)
     {
-        if (!$file->isWritable()) {
-            throw new StreamNotWritebleException(sprintf('"%s" is not writable!'));
+        if (self::canWrite($file)) {
+            throw new StreamNotWritableException(sprintf('"%s" is not writable!', $file->getFilename()));
         }
-        return new self($file->openFile('w'));
+        return new self($file->openFile('w'));// (!f && d) || (f && w) = !((f || !d) && (!f || !w)) = !(())
     }
 
-    public static function fromResource($resource)
+    private static function canWrite(SplFileInfo $file)
     {
-        $file = new \SplFileObject();
+        if (!$file->isFile() && (new SplFileInfo($file->getPath()))->isWritable()) {
+            touch($file->getPathname());
+            return true;
+        }
+        return false;
     }
 
     /** @inheritdoc */
     protected function doWrite($data)
     {
-        ;
+        $this->file->fwrite($data);
+        return $this;
     }
 }

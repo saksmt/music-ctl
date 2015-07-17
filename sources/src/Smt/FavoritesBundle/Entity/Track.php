@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace Smt\FavoritesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
@@ -8,7 +8,7 @@ use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
 /**
  * Class Track
  * @package AppBundle\Entity
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TrackRepository")
+ * @ORM\Entity(repositoryClass="Smt\FavoritesBundle\Repository\TrackRepository")
  * @ORM\Table(name="tbl_favorites")
  */
 class Track extends AbstractTagsCollection

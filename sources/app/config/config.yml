@@ -12,7 +12,7 @@ smt_mpd_mpc:
 
 smt_track_tags:
   factory:
-    target: AppBundle\Entity\Track
+    target: Smt\FavoritesBundle\Entity\Track
   provider:
     default: mpc
 

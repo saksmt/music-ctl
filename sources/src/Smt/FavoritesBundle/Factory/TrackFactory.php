@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Factory;
+namespace Smt\FavoritesBundle\Factory;
 
-use AppBundle\Entity\Track;
+use Smt\FavoritesBundle\Entity\Track;
 use Smt\TrackTagsBundle\Factory\TrackTagsCollectionFactoryInterface;
 
 class TrackFactory implements TrackTagsCollectionFactoryInterface

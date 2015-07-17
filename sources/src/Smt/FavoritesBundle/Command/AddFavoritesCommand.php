@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Command;
+namespace Smt\FavoritesBundle\Command;
 
-use AppBundle\Entity\Track;
+use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -47,7 +47,7 @@ class AddFavoritesCommand extends ContainerAwareCommand
          * @var ObjectManager $em
          */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $repo = $em->getRepository('AppBundle:Track');
+        $repo = $em->getRepository('SmtFavoritesBundle:Track');
         /** @var Track $found */
         $found = $repo->findOneBy([
             'album' => $track->getAlbum(),

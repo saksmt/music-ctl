@@ -63,7 +63,7 @@ fi
 
 chmod +x musicCtl.phar
 cp musicCtl.phar $libDir/self.phar
-if [[ -n $binDir/music-ctl ]]; then
+if [[ ! -e $binDir/music-ctl ]]; then
     ln -s $libDir/self.phar $binDir/music-ctl
 fi
 $libDir/self.phar cache:clear

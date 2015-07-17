@@ -4,6 +4,7 @@ namespace Application;
 
 use AppBundle\AppBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Smt\FavoritesBundle\SmtFavoritesBundle;
 use Smt\MpdBundle\SmtMpdBundle;
 use Smt\MpdMpcBundle\SmtMpdMpcBundle;
 use Smt\TrackTagsBundle\SmtTrackTagsBundle;
@@ -30,6 +31,7 @@ class Kernel extends BaseKernel
             new SmtMpdBundle(),
             new SmtMpdMpcBundle(),
             new SmtTrackTagsBundle(),
+            new SmtFavoritesBundle(),
         ];
     }
 
