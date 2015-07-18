@@ -62,4 +62,20 @@ class CoderRegistry
         }
         return $this->decoders[$alias];
     }
+
+    /**
+     * @return string[]
+     */
+    public function getAvailableDecoderNames()
+    {
+        return array_keys($this->decoders);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAvailableEncoderNames()
+    {
+        return array_keys($this->encoders);
+    }
 }

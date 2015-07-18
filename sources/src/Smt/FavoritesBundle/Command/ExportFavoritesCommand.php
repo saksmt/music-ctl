@@ -17,7 +17,7 @@ class ExportFavoritesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('favorites:export')
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format to export', 'internal')
+            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format to export (encoder)', 'internal')
             ->addOption('output', 'o', InputOption::VALUE_REQUIRED, 'Output file, defaults to stdout', null)
         ;
     }
@@ -34,7 +34,13 @@ class ExportFavoritesCommand extends ContainerAwareCommand
         /** @var EncoderInterface $encoder */
         $encoder = $this->getContainer()->get('smt.favorites.coder_registry')->getEncoder($in->getOption('format'));
         if (!isset($encoder)) {
-            $out->writeln(sprintf('<error>Encoder with name "%s" not found!</error>'), $in->getOption('format'));
+            $available = $this->getContainer()->get('smt.favorites.coder_registry')->getAvailableEncoderNames();
+            $out->writeln('Available encoders:');
+            foreach ($available as $encoderName) {
+                $out->writeln(sprintf(' <info>*</info> %s', $encoderName));
+            }
+            $out->writeln(sprintf('<error>Encoder with name "%s" not found!</error>', $in->getOption('format')));
+            return;
         }
         $stream->write($encoder->encodeCollection($favorites));
     }

@@ -11,5 +11,25 @@
             <tag name="favorites.encoder" alias="serialized" />
             <tag name="favorites.decoder" alias="serialized" />
         </service>
+        <service class="Smt\FavoritesBundle\Coder\JsonCoder" id="smt.favorites.json_coder">
+            <tag name="favorites.encoder" alias="json" />
+            <tag name="favorites.decoder" alias="json" />
+        </service>
+        <service class="Smt\FavoritesBundle\Registry\MergeStrategyRegistry" id="smt.favorites.merge_strategy_registry" />
+        <service class="Smt\FavoritesBundle\MergeStrategy\AverageStrategy" id="smt.favorites.merge_strategy.average">
+            <tag name="favorites.merge_strategy" alias="average" />
+        </service>
+        <service class="Smt\FavoritesBundle\MergeStrategy\SumStrategy" id="smt.favorites.merge_strategy.sum">
+            <tag name="favorites.merge_strategy" alias="sum" />
+        </service>
+        <service class="Smt\FavoritesBundle\MergeStrategy\SourceStrategy" id="smt.favorites.merge_strategy.source">
+            <tag name="favorites.merge_strategy" alias="source" />
+        </service>
+        <service class="Smt\FavoritesBundle\MergeStrategy\ImportedStrategy" id="smt.favorites.merge_strategy.importeed">
+            <tag name="favorites.merge_strategy" alias="imported" />
+        </service>
+        <service class="Smt\FavoritesBundle\Import\Importer" id="smt.favorites.importer">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
     </services>
 </container>

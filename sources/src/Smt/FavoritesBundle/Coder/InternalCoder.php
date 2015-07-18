@@ -4,7 +4,7 @@ namespace Smt\FavoritesBundle\Coder;
 
 use Smt\FavoritesBundle\Entity\Track;
 
-class InternalCoder implements EncoderInterface, DecoderInterface
+class InternalCoder extends AbstractCoder
 {
 
     /**
@@ -44,28 +44,5 @@ class InternalCoder implements EncoderInterface, DecoderInterface
     {
         $data = array_map([$this, 'flatten'], $tracks);
         return gzencode(serialize($data));
-    }
-
-    private function createTrack(array $data)
-    {
-        return (new Track())
-            ->setAlbum($data['album'])
-            ->setArtist($data['artist'])
-            ->setPath($data['path'])
-            ->setTitle($data['title'])
-            ->setSaved($data['saved'])
-            ->setRating($data['rating']);
-    }
-
-    private function flatten(Track $track)
-    {
-        return [
-            'album' => $track->getAlbum(),
-            'artist' => $track->getArtist(),
-            'path' => $track->getPath(),
-            'title' => $track->getTitle(),
-            'saved' => $track->isSaved(),
-            'rating' => $track->getRating(),
-        ];
     }
 }
