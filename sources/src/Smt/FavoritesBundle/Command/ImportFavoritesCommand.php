@@ -15,6 +15,7 @@ class ImportFavoritesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('favorites:import')
+            ->setDescription('Import favorites')
             ->addArgument('file', InputArgument::REQUIRED, 'File to import')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'Imported file format (decoder)', 'internal')
             ->addOption('merge-strategy', 'm', InputOption::VALUE_REQUIRED, 'Strategy to merge existing tracks', 'average')

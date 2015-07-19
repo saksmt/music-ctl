@@ -17,6 +17,7 @@ class ExportFavoritesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('favorites:export')
+            ->setDescription('Export favorites')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'Format to export (encoder)', 'internal')
             ->addOption('output', 'o', InputOption::VALUE_REQUIRED, 'Output file, defaults to stdout', null)
         ;
