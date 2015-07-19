@@ -7,7 +7,7 @@ require_once 'phar://' . \Paths::LIB . '/vendors.phar/vendor/autoload.php';
 
 use Application\Kernel;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Application\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 
@@ -24,6 +24,7 @@ AnnotationRegistry::registerAutoloadNamespaces([
 ]);
 
 $kernel = new Kernel($env, $debug);
+$kernel->boot();
 $application = new Application($kernel);
 $application->run($input);
 return $application;

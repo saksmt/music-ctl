@@ -37,6 +37,9 @@ Command List
  * `music-ctl todo:edit` and alias `music-ctl todo edit`
  * `music-ctl favorites:add`
  * `music-ctl favorites:list`
+ * `music-ctl favorites:remove`
+ * `music-ctl favorites:export`
+ * `music-ctl favorites:import`
 
 Explanation
 -----------
@@ -52,4 +55,4 @@ The only bug I've found while trying to set it up is in DoctrineBridge, but it i
 Developer Notes
 ---------------
 
-If anyone knows good way to remove some commands (doctrine, cache and so on...) from service container without breaking the whole app, I'd be glad to listen or read about it.
+If anyone knows good way to remove some commands|options (doctrine, cache, ... and --env, ...) from help without breaking the whole app, I'd be glad to listen or read about it.

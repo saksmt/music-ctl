@@ -5,6 +5,7 @@ namespace Smt\FavoritesBundle\Command;
 use Doctrine\Common\Persistence\ObjectManager;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

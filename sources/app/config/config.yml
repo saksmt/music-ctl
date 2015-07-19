@@ -6,6 +6,19 @@
 #    <smt_tracktags:provider default="mpc" />
 #</smt_tracktags:config>
 
+parameters:
+  commands.exclude:
+    - doctrine
+    - server
+    - orm
+    - debug
+    - lint
+    - generate
+    - config
+    - cache
+    - assets
+    - translation
+
 smt_mpd_mpc:
   configuration:
     id: default
