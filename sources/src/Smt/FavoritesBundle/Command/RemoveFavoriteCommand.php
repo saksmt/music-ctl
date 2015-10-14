@@ -3,6 +3,7 @@
 namespace Smt\FavoritesBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Smt\Component\Console\Style\GentooStyle;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\ListCommand;
@@ -27,25 +28,24 @@ class RemoveFavoriteCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $track = $em->getRepository('SmtFavoritesBundle:Track')
             ->find($in->getArgument('id'));
         if (!isset($track)) {
-            $out->writeln(sprintf('<error>There is no track with ID %d</error>', $in->getArgument('id')));
+            $out->error(sprintf('There is no track with ID %d', $in->getArgument('id')));
             return;
         }
         $trackFormatter = new DefaultTrackFormatter();
         $trackFormatter->setFormat('%artist [%album] - %t');
         if (!$in->getOption('force')) {
-            $question = new ConfirmationQuestion(sprintf('Remove "%s"? ', $trackFormatter->format($track)), false);
-            $questionHelper = new QuestionHelper();
-            if (!$questionHelper->ask($in, $out, $question)) {
+            if (!$out->confirm(sprintf('Remove "%s"? ', $trackFormatter->format($track)), false)) {
                 return;
             }
         }
         $em->remove($track);
         $em->flush();
-        $out->writeln(sprintf('Successfully removed "%s"!', $trackFormatter->format($track)));
+        $out->success(sprintf('Successfully removed "%s"!', $trackFormatter->format($track)));
     }
 }

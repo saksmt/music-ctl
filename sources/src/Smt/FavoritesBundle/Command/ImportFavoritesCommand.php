@@ -2,6 +2,7 @@
 
 namespace Smt\FavoritesBundle\Command;
 
+use Smt\Component\Console\Style\GentooStyle;
 use Smt\FavoritesBundle\Coder\DecoderInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,12 +26,13 @@ class ImportFavoritesCommand extends ContainerAwareCommand
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $file = new \SplFileInfo($in->getArgument('file'));
+        $out = new GentooStyle($out, $in);
         if (!$file->isFile()) {
-            $out->writeln('<error>File doesn\'t exist!</error>');
+            $out->error('File doesn\'t exist!');
             return;
         }
         if (!$file->isReadable()) {
-            $out->writeln('<error>Permission denied!</error>');
+            $out->error('Permission denied!');
             return;
         }
         $file = $file->openFile();
@@ -39,21 +41,23 @@ class ImportFavoritesCommand extends ContainerAwareCommand
         $decoder = $this->getContainer()->get('smt.favorites.coder_registry')->getDecoder($in->getOption('format'));
         if (!isset($decoder)) {
             $available = $this->getContainer()->get('smt.favorites.coder_registry')->getAvailableDecoderNames();
-            $out->writeln('Available decoders:');
-            foreach ($available as $decoderName) {
-                $out->writeln(sprintf(' <info>*</info> %s', $decoderName));
-            }
-            $out->writeln(sprintf('<error>Decoder with name "%s" not found!</error>', $in->getOption('format')));
+            $out
+                ->error(sprintf('Decoder with name "%s" not found!', $in->getOption('format')))
+                ->newLine()
+                ->info('Available decoders:')
+                ->nestedList($available)
+            ;
             return;
         }
         $mergeStrategy = $this->getContainer()->get('smt.favorites.merge_strategy_registry')->get($in->getOption('merge-strategy'));
         if (!isset($mergeStrategy)) {
             $available = $this->getContainer()->get('smt.favorites.merge_strategy_registry')->getAvailableNames();
-            $out->writeln('Available merge strategies:');
-            foreach ($available as $strategyName) {
-                $out->writeln(sprintf(' <info>*</info> %s', $strategyName));
-            }
-            $out->writeln(sprintf('<error>Merge strategy with name "%s" not found!</error>', $in->getOption('merge-strategy')));
+            $out
+                ->error(sprintf('Merge strategy with name "%s" not found!', $in->getOption('merge-strategy')))
+                ->newLine()
+                ->info('Available merge strategies:')
+                ->nestedList($available)
+            ;
             return;
         }
         $importer->setStrategy($mergeStrategy);
@@ -61,6 +65,6 @@ class ImportFavoritesCommand extends ContainerAwareCommand
             ->import($decoder->decodeCollection(file_get_contents($file->getPathname())))
             ->flush()
         ;
-        $out->writeln(sprintf('<info>Successfully imported %d tracks!</info>', $importer->getTotal()));
+        $out->success(sprintf('Successfully imported %d tracks!', $importer->getTotal()));
     }
 }

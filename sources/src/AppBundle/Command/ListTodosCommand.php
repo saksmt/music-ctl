@@ -4,6 +4,7 @@ namespace AppBundle\Command;
 
 use AppBundle\Entity\MusicTodo;
 use Doctrine\Common\Persistence\ObjectManager;
+use Smt\Component\Console\Style\GentooStyle;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +38,7 @@ class ListTodosCommand extends ContainerAwareCommand
             ];
         }, $em->getRepository('AppBundle:MusicTodo')->findLimited($page, $limit));
         if (!count($items) && $page == 1) {
-            $out->writeln($out->getFormatter()->format('<info>No todo`s have been added yet. Try to use "todo:add" first.</info>'));
+            $out->info('No todo`s have been added yet. Try to use <info>todo:add</info> first.');
             return;
         }
         $tbl = new Table($out);

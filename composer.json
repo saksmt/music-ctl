@@ -9,6 +9,7 @@
     "doctrine/doctrine-bundle": "~1",
     "symfony/finder": "*",
     "symfony/property-access": "*",
-    "symfony/yaml": "^2.7"
+    "symfony/yaml": "^2.7",
+    "smt/symfony-console-styles": "dev-develop"
   }
 }

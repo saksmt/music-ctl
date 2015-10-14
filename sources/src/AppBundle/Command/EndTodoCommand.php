@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use Smt\Component\Console\Style\GentooStyle;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,15 +20,16 @@ class EndTodoCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $todo = $em->getRepository('AppBundle:MusicTodo')->find($in->getArgument('id'));
         if (!isset($todo)) {
-            $out->writeln('<error>There is no music-todo with specified ID!</error>');
+            $out->error('There is no music-todo with specified ID!');
             return -1;
         }
         $em->remove($todo);
         $em->flush($todo);
-        $out->writeln('<success>Successfully ended todo!</success>');
+        $out->success('Successfully ended todo!');
         return 0;
     }
 }

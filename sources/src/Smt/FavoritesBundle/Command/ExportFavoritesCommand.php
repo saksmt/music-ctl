@@ -2,6 +2,7 @@
 
 namespace Smt\FavoritesBundle\Command;
 
+use Smt\Component\Console\Style\GentooStyle;
 use Smt\FavoritesBundle\Coder\EncoderInterface;
 use Smt\FavoritesBundle\Entity\Track;
 use AppBundle\Stream\FileStream;
@@ -26,6 +27,7 @@ class ExportFavoritesCommand extends ContainerAwareCommand
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $stream = new StdOutStream($out);
+        $out = new GentooStyle($out, $in);
         if ($in->hasOption('output') && $in->getOption('output') !== null) {
             $stream->redirect(FileStream::fromFilename($in->getOption('output')));
         }
@@ -36,11 +38,10 @@ class ExportFavoritesCommand extends ContainerAwareCommand
         $encoder = $this->getContainer()->get('smt.favorites.coder_registry')->getEncoder($in->getOption('format'));
         if (!isset($encoder)) {
             $available = $this->getContainer()->get('smt.favorites.coder_registry')->getAvailableEncoderNames();
-            $out->writeln('Available encoders:');
-            foreach ($available as $encoderName) {
-                $out->writeln(sprintf(' <info>*</info> %s', $encoderName));
-            }
-            $out->writeln(sprintf('<error>Encoder with name "%s" not found!</error>', $in->getOption('format')));
+            $out
+                ->error(sprintf('Encoder with name "%s" not found!', $in->getOption('format')))
+                ->info('Available encoders:')
+                ->nestedList($available);
             return;
         }
         $stream->write($encoder->encodeCollection($favorites));

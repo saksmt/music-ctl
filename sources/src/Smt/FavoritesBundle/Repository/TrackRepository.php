@@ -13,6 +13,9 @@ class TrackRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setFirstResult(($page - 1) * $limit)
             ->orderBy('t.rating', 'DESC')
+            ->addOrderBy('t.artist')
+            ->addOrderBy('t.album')
+            ->addOrderBy('t.title')
             ->getQuery()
             ->getResult()
         ;
@@ -22,8 +25,11 @@ class TrackRepository extends EntityRepository
     {
         return $this->createQueryBuilder('t')
             ->select('t')
-            ->where('t.saved = 1')
+            ->where('t.saved = 0')
             ->orderBy('t.rating', 'DESC')
+            ->addOrderBy('t.artist')
+            ->addOrderBy('t.album')
+            ->addOrderBy('t.title')
             ->getQuery()
             ->getResult()
         ;

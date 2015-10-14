@@ -41,13 +41,15 @@ fi
 
 if [[ "$1" == "rebuild-vendor" ]] || [[ ! -f 'vendors.phar' ]]; then
     composer="composer"
-    if [[ "$(which composer) | grep -o 'not found'" != "" ]]; then
-        if [[ "$(which curl) | grep -o 'not found'" != "" ]]; then
-            wget -qO- http://getcomposer.org/installer | php
-        else
-            curl -Ss http://getcomposer.org/installer | php
-        fi
+    if [[ "$(which composer | grep -o 'not found')" != "" ]]; then
         composer=$PWD"/composer.phar"
+        if [[ -n "$composer" ]]; then
+            if [[ "$(which curl | grep -o 'not found')" != "" ]]; then
+                wget -qO- http://getcomposer.org/installer | php
+            else
+                curl -Ss http://getcomposer.org/installer | php
+            fi
+        fi
     fi
     $composer -o update
     cd sources

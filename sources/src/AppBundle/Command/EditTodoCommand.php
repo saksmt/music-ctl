@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Smt\Component\Console\Style\GentooStyle;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,13 +33,12 @@ class EditTodoCommand extends ContainerAwareCommand
         if (!$in->getOption('shell')) {
             return;
         }
-        $helper = $this->getHelper('question');
+        $out = new GentooStyle($out, $in);
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $repo = $em->getRepository('AppBundle:MusicTodo');
         $id = $in->getOption('id');
         if (!isset($id)) {
-            $question = new Question('ID of todo:');
-            $question->setValidator(function ($answer) use ($repo) {
+            $id = $out->ask('ID of todo:', null, function ($answer) use ($repo) {
                 if (!is_int($answer)) {
                     throw new \Exception('ID must be integer value!');
                 }
@@ -47,7 +47,6 @@ class EditTodoCommand extends ContainerAwareCommand
                 }
                 return $answer;
             });
-            $id = $helper->ask($in, $out, $question);
         }
         $todo = $repo->find($id);
         $propertyAccessor = new PropertyAccessor();
@@ -55,8 +54,7 @@ class EditTodoCommand extends ContainerAwareCommand
             if ($in->hasOption($property) && $in->getOption($property) !== null) {
                 $propertyAccessor->setValue($todo, $property, $in->getOption($property));
             } else {
-                $question = new Question(sprintf('Enter todo`s %s:', $property), $propertyAccessor->getValue($todo, $property));
-                $response = $helper->ask($in, $out, $question);
+                $response = $out->ask(sprintf('Enter todo`s %s', $property), $propertyAccessor->getValue($todo, $property));
                 if ($response != $propertyAccessor->getValue($todo, $property)) {
                     $propertyAccessor->setValue($todo, $property, $response);
                 }
@@ -80,9 +78,10 @@ class EditTodoCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         $id = $in->getOption('id');
         if (!isset($id)) {
-            $out->getFormatter()->format('<error>No ID specified!</error>');
+            $out->error('No ID Specified!');
         }
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');

@@ -2,6 +2,7 @@
 
 namespace Smt\FavoritesBundle\Command;
 
+use Smt\Component\Console\Style\GentooStyle;
 use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
@@ -39,6 +40,7 @@ class AddFavoritesCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         /**
          * @var Track $track
          */
@@ -61,15 +63,15 @@ class AddFavoritesCommand extends ContainerAwareCommand
                 $found->voteUp();
                 $em->persist($found);
                 $em->flush();
-                $out->writeln(sprintf('<info>' . $in->getOption('vote-up-text') . '</info>',
+                $out->info(sprintf($in->getOption('vote-up-text'),
                     $formatter->format($found), $found->getRating()+1));
                 return;
             } else {
-                $out->writeln(sprintf('<info>"%s" is already in favorites!</info>', $formatter->format($found)));
+                $out->warning(sprintf('"%s" is already in favorites!', $formatter->format($found)));
             }
         }
         $em->persist($track);
         $em->flush();
-        $out->writeln(sprintf('<info>' . $in->getOption('added-text') . '</info>', $formatter->format($track)));
+        $out->success(sprintf($in->getOption('added-text'), $formatter->format($track)));
     }
 }

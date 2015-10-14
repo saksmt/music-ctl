@@ -2,6 +2,9 @@
 
 namespace Smt\FavoritesBundle\Command;
 
+use Smt\Component\Console\Style\GentooStyle;
+use Smt\Component\Console\Style\KernelStyle;
+use Smt\Component\Console\Test\VisualTest;
 use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
@@ -33,6 +36,7 @@ class ListFavoritesCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         if ($in->getOption('save-mode')) {
             $this->runSaveMode($in, $out);
             return;
@@ -42,12 +46,7 @@ class ListFavoritesCommand extends ContainerAwareCommand
         $repo = $em->getRepository('SmtFavoritesBundle:Track');
         $tracks = $repo->findLimited($in->getOption('page'), $in->getOption('limit'));
         if (empty($tracks)) {
-            $out->write('<info>No tracks on this page.');
-            for ($i = 0; $i < 2; $i++) {
-                usleep(250000);
-                $out->write('.');
-            }
-            $out->writeln('</info>');
+            $out->info('No tracks on this page.');
             return;
         }
         $tbl = new Table($out);
@@ -96,6 +95,7 @@ class ListFavoritesCommand extends ContainerAwareCommand
 
     private function runSaveMode(InputInterface $in, OutputInterface $out)
     {
+        $out = new GentooStyle($out, $in);
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $repo = $em->getRepository('SmtFavoritesBundle:Track');
@@ -103,22 +103,24 @@ class ListFavoritesCommand extends ContainerAwareCommand
         $tracks = $repo->findUnsaved();
         $formatter = new DefaultTrackFormatter();
         $formatter->setFormat('%artist [%album] - %t (%f)');
-        $questionHelper = new QuestionHelper();
         // n - skip, s - accept (set saved), e - exit
         $saved = 0;
         foreach ($tracks as $track) {
-            $question = new ChoiceQuestion($formatter->format($track), ['n' => 'Next', 's' => 'Save', 'e' => 'Exit'], 'n');
-            $answer = $questionHelper->ask($in, $out, $question);
-            if ($answer == 's') {
+            $answer = $out->choice(
+                $formatter->format($track),
+                ['n' => 'Next', 's' => 'Save', 'e' => 'Exit'],
+                'n'
+            );
+            if ($answer == 'Save') {
                 $em->persist($track->save());
                 $saved++;
-            } elseif ($answer == 'e') {
+            } elseif ($answer == 'Exit') {
                 break;
             }
         }
         $em->flush();
         $total = count($tracks);
-        $out->write(sprintf('Saved <info>%d</info>, Skipped <info>%d</info>, Total: <info>%d</info>',
+        $out->success(sprintf('Saved <info>%d</info>, Skipped <info>%d</info>, Total: <info>%d</info>',
             $saved,
             $total - $saved,
             $total));
