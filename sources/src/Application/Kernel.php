@@ -12,10 +12,15 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
+/**
+ * Application kernel
+ * @package Application
+ * @author Kirill Saksin <kirill.saksin@billing.ru>
+ */
 class Kernel extends BaseKernel
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function registerBundles()
     {
         return [
@@ -35,22 +40,25 @@ class Kernel extends BaseKernel
         ];
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(dirname(dirname(__DIR__)) . '/app/config/config.xml');
     }
 
+    /** {@inheritdoc} */
     public function getRootDir()
     {
         return dirname(dirname(__DIR__)) . '/app/';
     }
 
+    /** {@inheritdoc} */
     public function getLogDir()
     {
         return \Paths::LOG;
     }
 
+    /** {@inheritdoc} */
     public function getCacheDir()
     {
         return \Paths::CACHE;

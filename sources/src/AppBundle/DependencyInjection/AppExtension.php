@@ -7,10 +7,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * Base extension for configuration
+ * @package AppBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class AppExtension extends Extension
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();

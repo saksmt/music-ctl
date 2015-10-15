@@ -11,8 +11,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command for addition track to favorites
+ * @package Smt\FavoritesBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class AddFavoritesCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -38,6 +44,10 @@ class AddFavoritesCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $out = new GentooStyle($out, $in);
@@ -46,13 +56,12 @@ class AddFavoritesCommand extends ContainerAwareCommand
          */
         $track = $this->getContainer()->get('track.provider')->get();
         /**
-         * @var ObjectManager $em
+         * @var ObjectManager $manager
          */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $repo = $em->getRepository('SmtFavoritesBundle:Track');
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $repo = $manager->getRepository('SmtFavoritesBundle:Track');
         /** @var Track $found */
         $found = $repo->findOneBy([
-            'album' => $track->getAlbum(),
             'artist' => $track->getArtist(),
             'title' => $track->getTitle(),
         ]);
@@ -61,17 +70,20 @@ class AddFavoritesCommand extends ContainerAwareCommand
         if (isset($found)) {
             if (!$in->getOption('no-vote-up')) {
                 $found->voteUp();
-                $em->persist($found);
-                $em->flush();
-                $out->info(sprintf($in->getOption('vote-up-text'),
-                    $formatter->format($found), $found->getRating()+1));
+                $manager->persist($found);
+                $manager->flush();
+                $out->info(sprintf(
+                    $in->getOption('vote-up-text'),
+                    $formatter->format($found),
+                    $found->getRating() + 1
+                ));
                 return;
             } else {
                 $out->warning(sprintf('"%s" is already in favorites!', $formatter->format($found)));
             }
         }
-        $em->persist($track);
-        $em->flush();
+        $manager->persist($track);
+        $manager->flush();
         $out->success(sprintf($in->getOption('added-text'), $formatter->format($track)));
     }
 }

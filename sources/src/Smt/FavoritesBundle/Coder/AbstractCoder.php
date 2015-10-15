@@ -4,8 +4,17 @@ namespace Smt\FavoritesBundle\Coder;
 
 use Smt\FavoritesBundle\Entity\Track;
 
+/**
+ * Base class for encoders+decoders
+ * @package Smt\FavoritesBundle\Coder
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 abstract class AbstractCoder implements EncoderInterface, DecoderInterface
 {
+    /**
+     * @param array $data Flat track data
+     * @return Track
+     */
     protected function createTrack(array $data)
     {
         return (new Track())
@@ -17,6 +26,10 @@ abstract class AbstractCoder implements EncoderInterface, DecoderInterface
             ->setRating($data['rating']);
     }
 
+    /**
+     * @param Track $track
+     * @return array Flattened track
+     */
     protected function flatten(Track $track)
     {
         return [

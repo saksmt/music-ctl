@@ -5,10 +5,15 @@ namespace Smt\TrackTagsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Bundle configuration
+ * @package Smt\TrackTagsBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class Configuration implements ConfigurationInterface
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function getConfigTreeBuilder()
     {
         $builder = new TreeBuilder();

@@ -2,6 +2,11 @@
 
 namespace Smt\TrackTagsBundle\Entity;
 
+/**
+ * Track as collection of tags
+ * @package Smt\TrackTagsBundle\Entity
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 interface TrackTagsCollectionInterface
 {
     /**

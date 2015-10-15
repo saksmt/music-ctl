@@ -7,10 +7,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
+/**
+ * @auto-generated
+ * @package Smt\MpdBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class SmtMpdExtension extends Extension
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function load(array $config, ContainerBuilder $container)
     {
         $configuration = new Configuration();

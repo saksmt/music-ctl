@@ -14,8 +14,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+/**
+ * Represents command for editing to \bdo
+ * @package AppBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class EditTodoCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -28,14 +34,18 @@ class EditTodoCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in, $id
+     */
     public function interact(InputInterface $in, OutputInterface $out)
     {
         if (!$in->getOption('shell')) {
             return;
         }
         $out = new GentooStyle($out, $in);
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $repo = $em->getRepository('AppBundle:MusicTodo');
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $repo = $manager->getRepository('AppBundle:MusicTodo');
         $id = $in->getOption('id');
         if (!isset($id)) {
             $id = $out->ask('ID of todo:', null, function ($answer) use ($repo) {
@@ -60,8 +70,8 @@ class EditTodoCommand extends ContainerAwareCommand
                 }
             }
         }
-        $em->persist($todo);
-        $em->flush();
+        $manager->persist($todo);
+        $manager->flush();
         $tbl = new Table($out);
         $tbl
             ->setHeaders(['#', 'Artist', 'Note', 'Status'])
@@ -76,6 +86,10 @@ class EditTodoCommand extends ContainerAwareCommand
         return;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in, $id
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $out = new GentooStyle($out, $in);
@@ -83,17 +97,17 @@ class EditTodoCommand extends ContainerAwareCommand
         if (!isset($id)) {
             $out->error('No ID Specified!');
         }
-        /** @var ObjectManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $todo = $em->getRepository('AppBundle:MusicTodo')->find($id);
+        /** @var ObjectManager $manager */
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $todo = $manager->getRepository('AppBundle:MusicTodo')->find($id);
         $propertyAccessor = new PropertyAccessor();
         foreach (['artist', 'note', 'statusName'] as $property) {
             if ($in->hasOption($property) && $in->getOption($property) !== null) {
                 $propertyAccessor->setValue($todo, $property, $in->getOption($property));
             }
         }
-        $em->persist($todo);
-        $em->flush();
+        $manager->persist($todo);
+        $manager->flush();
         $tbl = new Table($out);
         $tbl
             ->setHeaders(['#', 'Artist', 'Note', 'Status'])

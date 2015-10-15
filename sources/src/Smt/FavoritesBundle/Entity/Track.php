@@ -6,10 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
 
 /**
- * Class Track
+ * Represents track
  * @package AppBundle\Entity
  * @ORM\Entity(repositoryClass="Smt\FavoritesBundle\Repository\TrackRepository")
  * @ORM\Table(name="tbl_favorites")
+ * @SuppressWarnings(PHPMD.ShortVariable) $id
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
  */
 class Track extends AbstractTagsCollection
 {
@@ -22,37 +24,37 @@ class Track extends AbstractTagsCollection
     private $id;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @ORM\Column(type="string", length=255)
      */
     protected $artist;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @ORM\Column(type="string", length=255)
      */
     protected $path;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @ORM\Column(type="string", length=255)
      */
     protected $album;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @ORM\Column(type="string", length=255)
      */
     protected $title;
 
     /**
-     * @var int
+     * @var int Track rating
      * @ORM\Column(type="smallint", length=2)
      */
     private $rating = 0;
 
     /**
-     * @var bool
+     * @var bool Whether user already saved track
      * @ORM\Column(type="boolean")
      */
     private $saved = false;
@@ -66,8 +68,8 @@ class Track extends AbstractTagsCollection
     }
 
     /**
-     * @param int $rating
-     * @return $this
+     * @param int $rating Track rating
+     * @return Track
      */
     public function setRating($rating)
     {
@@ -76,7 +78,7 @@ class Track extends AbstractTagsCollection
     }
 
     /**
-     * @return $this
+     * @return Track
      */
     public function voteUp()
     {
@@ -92,6 +94,9 @@ class Track extends AbstractTagsCollection
         return $this->saved;
     }
 
+    /**
+     * @return Track
+     */
     public function save()
     {
         $this->saved = true;
@@ -99,8 +104,8 @@ class Track extends AbstractTagsCollection
     }
 
     /**
-     * @param bool $saved
-     * @return $this
+     * @param bool $saved Whether user saved track
+     * @return Track
      */
     public function setSaved($saved)
     {

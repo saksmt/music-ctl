@@ -4,6 +4,11 @@ namespace Smt\TrackTagsBundle\Formatter;
 
 use Smt\TrackTagsBundle\Entity\TrackTagsCollectionInterface;
 
+/**
+ * Default track formatter
+ * @package Smt\TrackTagsBundle\Formatter
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class DefaultTrackFormatter implements TrackFormatterInterface
 {
 
@@ -49,10 +54,7 @@ class DefaultTrackFormatter implements TrackFormatterInterface
         return self::$formatMap;
     }
 
-    /**
-     * @param TrackTagsCollectionInterface $track
-     * @return string
-     */
+    /** {@inheritdoc} */
     public function format(TrackTagsCollectionInterface $track)
     {
         $formatValues = array_map(function (callable $factory) use ($track) {
@@ -61,10 +63,7 @@ class DefaultTrackFormatter implements TrackFormatterInterface
         return str_replace(array_keys($formatValues), $formatValues, $this->format);
     }
 
-    /**
-     * @param string $format
-     * @return TrackFormatterInterface
-     */
+    /** {@inheritdoc} */
     public function setFormat($format)
     {
         $formatKeys = [];

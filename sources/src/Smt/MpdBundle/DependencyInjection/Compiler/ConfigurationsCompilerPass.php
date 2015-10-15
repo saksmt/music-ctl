@@ -5,10 +5,15 @@ namespace Smt\MpdBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Registers host configurations
+ * @package Smt\MpdBundle\DependencyInjection\Compiler
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class ConfigurationsCompilerPass implements CompilerPassInterface
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function process(ContainerBuilder $container)
     {
         $registryDefinition = $container->getDefinition('mpd.configuration.registry');

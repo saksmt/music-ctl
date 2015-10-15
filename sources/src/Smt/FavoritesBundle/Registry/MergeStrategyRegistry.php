@@ -4,6 +4,11 @@ namespace Smt\FavoritesBundle\Registry;
 
 use Smt\FavoritesBundle\MergeStrategy\MergeStrategyInterface;
 
+/**
+ * Registry for merge strategies
+ * @package Smt\FavoritesBundle\Registry
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class MergeStrategyRegistry
 {
     /**
@@ -13,8 +18,8 @@ class MergeStrategyRegistry
 
     /**
      * @param string $name Strategy name
-     * @param MergeStrategyInterface $strategy
-     * @return $this
+     * @param MergeStrategyInterface $strategy Strategy
+     * @return MergeStrategyRegistry
      */
     public function add($name, MergeStrategyInterface $strategy)
     {

@@ -5,13 +5,15 @@ namespace Smt\MpdBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Bundle configuration
+ * @auto-generated
+ * @package Smt\MpdBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * Generates the configuration tree builder.
-     *
-     * @return TreeBuilder The tree builder
-     */
+    /** {@inheritdoc} */
     public function getConfigTreeBuilder()
     {
         $builder = new TreeBuilder();

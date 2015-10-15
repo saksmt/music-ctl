@@ -10,6 +10,7 @@
     "symfony/finder": "*",
     "symfony/property-access": "*",
     "symfony/yaml": "^2.7",
-    "smt/symfony-console-styles": "dev-develop"
+    "smt/symfony-console-styles": "~1",
+    "smt/streams": "~1"
   }
 }

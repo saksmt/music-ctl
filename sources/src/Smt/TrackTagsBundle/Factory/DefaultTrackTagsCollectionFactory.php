@@ -2,8 +2,11 @@
 
 namespace Smt\TrackTagsBundle\Factory;
 
-use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
-
+/**
+ * Default track factory
+ * @package Smt\TrackTagsBundle\Factory
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class DefaultTrackTagsCollectionFactory implements TrackTagsCollectionFactoryInterface
 {
     /**
@@ -11,14 +14,18 @@ class DefaultTrackTagsCollectionFactory implements TrackTagsCollectionFactoryInt
      */
     private $targetClass;
 
+    /**
+     * Constructor.
+     * @param Class<? extends TrackTagsCollection> $targetClass Class of track
+     */
     public function __construct($targetClass)
     {
         $this->targetClass = $targetClass;
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function createTrack()
     {
-        return new $this->targetClass;
+        return new $this->targetClass();
     }
 }

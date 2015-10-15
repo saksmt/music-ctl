@@ -3,9 +3,21 @@
 namespace Smt\FavoritesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Smt\FavoritesBundle\Entity\Track;
 
+/**
+ * Repository of tracks
+ * @package Smt\FavoritesBundle\Repository
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class TrackRepository extends EntityRepository
 {
+    /**
+     * Find with paging
+     * @param int $page Page number
+     * @param int $limit Records per page
+     * @return Track[]
+     */
     public function findLimited($page, $limit)
     {
         return $this->createQueryBuilder('t')
@@ -21,6 +33,10 @@ class TrackRepository extends EntityRepository
         ;
     }
 
+    /**
+     * Find unsaved tracks
+     * @return Track[]
+     */
     public function findUnsaved()
     {
         return $this->createQueryBuilder('t')

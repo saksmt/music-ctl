@@ -10,6 +10,11 @@ use Smt\TrackTagsBundle\Entity\TrackTagsCollectionInterface;
 use Smt\TrackTagsBundle\Factory\TrackTagsCollectionFactoryInterface;
 use Smt\TrackTagsBundle\Provider\TrackProviderInterface;
 
+/**
+ * Track provider
+ * @package Smt\MpdMpcBundle\Provider
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class MpcTrackProvider implements TrackProviderInterface
 {
 
@@ -26,9 +31,9 @@ class MpcTrackProvider implements TrackProviderInterface
     private $currentProviderCommand;
 
     /**
-     * @param TrackTagsCollectionFactoryInterface $factory
-     * @param ConfigurationRegistry $registry
-     * @param string $configurationId
+     * @param TrackTagsCollectionFactoryInterface $factory Track factory
+     * @param ConfigurationRegistry $registry Configuration registry
+     * @param string $configurationId Configuration ID
      * @throws ConfigurationNotFoundException
      */
     public function __construct(TrackTagsCollectionFactoryInterface $factory, ConfigurationRegistry $registry, $configurationId)
@@ -56,6 +61,9 @@ class MpcTrackProvider implements TrackProviderInterface
         ;
     }
 
+    /**
+     * @return object
+     */
     private function executeCommand()
     {
         $result = explode("\t", substr(shell_exec($this->currentProviderCommand), 0, -1));
@@ -63,6 +71,6 @@ class MpcTrackProvider implements TrackProviderInterface
         foreach (['artist', 'album', 'title', 'path'] as $pos => $key) {
             $data[$key] = $result[$pos];
         }
-        return (object)$data;
+        return (object) $data;
     }
 }

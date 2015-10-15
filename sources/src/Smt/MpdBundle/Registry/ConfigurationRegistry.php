@@ -5,31 +5,40 @@ namespace Smt\MpdBundle\Registry;
 use Smt\MpdBundle\Configuration\HostConfiguration;
 use Smt\MpdBundle\Exception\ConfigurationNotFoundException;
 
+/**
+ * Registry for host configurations
+ * @package Smt\MpdBundle\Registry
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class ConfigurationRegistry
 {
     private $configurations = [];
 
     /**
-     * @param string $name
-     * @param HostConfiguration $config
+     * @param string $name Configuration name
+     * @param HostConfiguration $config Configuration
+     * @return ConfigurationRegistry
      */
     public function addConfiguration($name, HostConfiguration $config)
     {
         $this->configurations[$name] = $config;
+        return $this;
     }
 
     /**
-     * @param HostConfiguration[] $configs
+     * @param HostConfiguration[] $configs List of configurations
+     * @return ConfigurationRegistry
      */
     public function addConfigurations(array $configs)
     {
         foreach ($configs as $name => $config) {
             $this->addConfiguration($name, $config);
         }
+        return $this;
     }
 
     /**
-     * @param string $name
+     * @param string $name Configuration name
      * @return HostConfiguration
      * @throws ConfigurationNotFoundException
      */

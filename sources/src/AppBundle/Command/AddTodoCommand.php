@@ -10,8 +10,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Represents command for adding to \bdo
+ * @package AppBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class AddTodoCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -22,20 +28,24 @@ class AddTodoCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         /**
-         * @var ObjectManager $em
+         * @var ObjectManager $manager
          */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $todo = new MusicTodo();
         $todo
             ->setArtist($in->getArgument('artist'))
             ->setNote($in->getArgument('note'))
         ;
-        $em->persist($todo);
-        $em->flush();
-        $em->refresh($todo);
+        $manager->persist($todo);
+        $manager->flush();
+        $manager->refresh($todo);
         $tbl = new Table($out);
         $tbl
             ->setHeaders(['#', 'Artist', 'Note', 'Status'])

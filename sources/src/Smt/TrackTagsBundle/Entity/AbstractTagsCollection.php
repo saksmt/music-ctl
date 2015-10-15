@@ -2,6 +2,11 @@
 
 namespace Smt\TrackTagsBundle\Entity;
 
+/**
+ * Track as collection of tags
+ * @package Smt\TrackTagsBundle\Entity
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 abstract class AbstractTagsCollection implements TrackTagsCollectionInterface
 {
     /**
@@ -33,8 +38,8 @@ abstract class AbstractTagsCollection implements TrackTagsCollectionInterface
     }
 
     /**
-     * @param string $album
-     * @return $this
+     * @param string $album Album name
+     * @return AbstractTagsCollection
      */
     public function setAlbum($album)
     {
@@ -51,8 +56,8 @@ abstract class AbstractTagsCollection implements TrackTagsCollectionInterface
     }
 
     /**
-     * @param string $artist
-     * @return $this
+     * @param string $artist Artist name
+     * @return AbstractTagsCollection
      */
     public function setArtist($artist)
     {
@@ -69,8 +74,8 @@ abstract class AbstractTagsCollection implements TrackTagsCollectionInterface
     }
 
     /**
-     * @param string $title
-     * @return $this
+     * @param string $title Track title
+     * @return AbstractTagsCollection
      */
     public function setTitle($title)
     {
@@ -87,8 +92,8 @@ abstract class AbstractTagsCollection implements TrackTagsCollectionInterface
     }
 
     /**
-     * @param string $path
-     * @return $this
+     * @param string $path Path to track
+     * @return AbstractTagsCollection
      */
     public function setPath($path)
     {

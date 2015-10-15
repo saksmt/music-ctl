@@ -6,6 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+/**
+ * Application
+ * @package Application
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class Application extends BaseApplication
 {
     const VERSION = '0.0.0';
@@ -20,6 +25,10 @@ class Application extends BaseApplication
      */
     private $excludeCommands = [];
 
+    /**
+     * Constructor.
+     * @param KernelInterface $kernel Symfony kernel
+     */
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct($kernel);
@@ -28,19 +37,19 @@ class Application extends BaseApplication
         }
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function getName()
     {
         return 'music-ctl';
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function getVersion()
     {
         return self::VERSION . ($this->getKernel()->getEnvironment() !== 'prod' ? ' ' . $this->getKernel()->getEnvironment() : '');
     }
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function all($namespace = null)
     {
         if (isset($namespace)) {

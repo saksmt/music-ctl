@@ -7,12 +7,17 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Smt\FavoritesBundle\Entity\Track;
 use Smt\FavoritesBundle\MergeStrategy\MergeStrategyInterface;
 
+/**
+ * Imports tracks to favorites database
+ * @package Smt\FavoritesBundle\Import
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class Importer
 {
     /**
      * @var ObjectManager
      */
-    private $om;
+    private $manager;
 
     /**
      * @var ObjectRepository
@@ -29,12 +34,21 @@ class Importer
      */
     private $imported = 0;
 
-    public function __construct(ObjectManager $om)
+    /**
+     * Constructor.
+     * @param ObjectManager $manager Doctrine manager
+     */
+    public function __construct(ObjectManager $manager)
     {
-        $this->om = $om;
-        $this->repo = $om->getRepository('SmtFavoritesBundle:Track');
+        $this->manager = $manager;
+        $this->repo = $manager->getRepository('SmtFavoritesBundle:Track');
     }
 
+    /**
+     * Set track merging strategy
+     * @param MergeStrategyInterface $strategy Merging strategy
+     * @return Importer
+     */
     public function setStrategy(MergeStrategyInterface $strategy)
     {
         $this->strategy = $strategy;
@@ -42,8 +56,8 @@ class Importer
     }
 
     /**
-     * @param Track[] $tracks
-     * @return $this
+     * @param Track[] $tracks Tracks to import
+     * @return Importer
      */
     public function import(array $tracks)
     {
@@ -55,11 +69,11 @@ class Importer
     }
 
     /**
-     * @return $this
+     * @return Importer
      */
     public function flush()
     {
-        $this->om->flush();
+        $this->manager->flush();
         return $this;
     }
 
@@ -71,12 +85,14 @@ class Importer
         return $this->imported;
     }
 
+    /**
+     * @param Track $track
+     */
     private function importTrack(Track $track)
     {
         /** @var Track $sourceTrack */
         $sourceTrack = $this->repo->findOneBy([
             'title' => $track->getTitle(),
-            'album' => $track->getAlbum(),
             'artist' => $track->getArtist(),
         ]);
         if (isset($sourceTrack)) {
@@ -84,6 +100,6 @@ class Importer
         } else {
             $sourceTrack = $track;
         }
-        $this->om->persist($sourceTrack);
+        $this->manager->persist($sourceTrack);
     }
 }

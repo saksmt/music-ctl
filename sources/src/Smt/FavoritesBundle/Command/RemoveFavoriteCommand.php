@@ -14,8 +14,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
+/**
+ * Almost useless command for removal of favorite track
+ * @package Smt\FavoritesBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class RemoveFavoriteCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -26,12 +32,16 @@ class RemoveFavoriteCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $out = new GentooStyle($out, $in);
-        /** @var ObjectManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $track = $em->getRepository('SmtFavoritesBundle:Track')
+        /** @var ObjectManager $manager */
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $track = $manager->getRepository('SmtFavoritesBundle:Track')
             ->find($in->getArgument('id'));
         if (!isset($track)) {
             $out->error(sprintf('There is no track with ID %d', $in->getArgument('id')));
@@ -44,8 +54,8 @@ class RemoveFavoriteCommand extends ContainerAwareCommand
                 return;
             }
         }
-        $em->remove($track);
-        $em->flush();
+        $manager->remove($track);
+        $manager->flush();
         $out->success(sprintf('Successfully removed "%s"!', $trackFormatter->format($track)));
     }
 }

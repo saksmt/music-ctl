@@ -8,10 +8,15 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * Application extension
+ * @package Smt\TrackTagsBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class SmtTrackTagsExtension extends Extension
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function load(array $config, ContainerBuilder $container)
     {
         $configuration = new Configuration();

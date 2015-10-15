@@ -5,10 +5,15 @@ namespace Smt\FavoritesBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @brief Tags for merge-strategies
+ * @package Smt\FavoritesBundle\DependencyInjection\Compiler
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class FavoritesMergeStrategyPass implements CompilerPassInterface
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function process(ContainerBuilder $container)
     {
         $registry = $container->getDefinition('smt.favorites.merge_strategy_registry');

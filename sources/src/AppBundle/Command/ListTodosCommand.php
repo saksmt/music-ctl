@@ -11,8 +11,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Represents command to list all to \bdo's
+ * @package AppBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class ListTodosCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -23,12 +29,16 @@ class ListTodosCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $page = $in->getOption('page');
         $limit = $in->getOption('limit');
-        /** @var ObjectManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        /** @var ObjectManager $manager */
+        $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $items = array_map(function (MusicTodo $item) {
             return [
                 $item->getId(),
@@ -36,7 +46,7 @@ class ListTodosCommand extends ContainerAwareCommand
                 $item->getNote(),
                 $item->getStatusName(),
             ];
-        }, $em->getRepository('AppBundle:MusicTodo')->findLimited($page, $limit));
+        }, $manager->getRepository('AppBundle:MusicTodo')->findLimited($page, $limit));
         if (!count($items) && $page == 1) {
             $out->info('No todo`s have been added yet. Try to use <info>todo:add</info> first.');
             return;

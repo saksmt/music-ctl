@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @package AppBundle\Entity
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MusicTodoRepository")
  * @ORM\Table(name="tbl_todo")
+ * @SuppressWarnings(PHPMD.ShortVariable) $id
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
  */
 class MusicTodo
 {
@@ -59,7 +61,7 @@ class MusicTodo
     }
 
     /**
-     * @param int $status
+     * @param int $status To \bdo status (new or partially complete)
      * @return $this
      */
     public function setStatus($status)
@@ -77,7 +79,7 @@ class MusicTodo
     }
 
     /**
-     * @param string $note
+     * @param string $note Additional info
      * @return $this
      */
     public function setNote($note)
@@ -95,7 +97,7 @@ class MusicTodo
     }
 
     /**
-     * @param string $artist
+     * @param string $artist Artist to find
      * @return $this
      */
     public function setArtist($artist)
@@ -112,6 +114,10 @@ class MusicTodo
         return self::getStatusNames()[$this->status];
     }
 
+    /**
+     * @param string $name Status name
+     * @return $this
+     */
     public function setStatusName($name)
     {
         $map = array_flip(array_map('strtolower', self::getStatusNames()));

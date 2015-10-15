@@ -5,6 +5,11 @@ namespace Smt\FavoritesBundle\Registry;
 use Smt\FavoritesBundle\Coder\DecoderInterface;
 use Smt\FavoritesBundle\Coder\EncoderInterface;
 
+/**
+ * Registry of encoders/decoders
+ * @package Smt\FavoritesBundle\Registry
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class CoderRegistry
 {
     /**
@@ -18,9 +23,9 @@ class CoderRegistry
     private $decoders = [];
 
     /**
-     * @param string $alias
-     * @param EncoderInterface $encoder
-     * @return $this
+     * @param string $alias Encoder name
+     * @param EncoderInterface $encoder Encoder
+     * @return CoderRegistry
      */
     public function addEncoder($alias, EncoderInterface $encoder)
     {
@@ -29,9 +34,9 @@ class CoderRegistry
     }
 
     /**
-     * @param string $alias
-     * @param DecoderInterface $decoder
-     * @return $this
+     * @param string $alias Decoder name
+     * @param DecoderInterface $decoder Decoder
+     * @return CoderRegistry
      */
     public function addDecoder($alias, DecoderInterface $decoder)
     {
@@ -40,7 +45,7 @@ class CoderRegistry
     }
 
     /**
-     * @param string $alias
+     * @param string $alias Encoder name
      * @return EncoderInterface
      */
     public function getEncoder($alias)
@@ -52,7 +57,7 @@ class CoderRegistry
     }
 
     /**
-     * @param string $alias
+     * @param string $alias Decoder name
      * @return DecoderInterface
      */
     public function getDecoder($alias)

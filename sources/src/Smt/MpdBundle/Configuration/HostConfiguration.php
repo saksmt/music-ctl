@@ -2,6 +2,11 @@
 
 namespace Smt\MpdBundle\Configuration;
 
+/**
+ * Represents host configuration
+ * @package Smt\MpdBundle\Configuration
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class HostConfiguration
 {
     /**
@@ -28,8 +33,8 @@ class HostConfiguration
     }
 
     /**
-     * @param string $host
-     * @return $this
+     * @param string $host Host address
+     * @return HostConfiguration
      */
     public function setHost($host)
     {
@@ -46,8 +51,8 @@ class HostConfiguration
     }
 
     /**
-     * @param int $port
-     * @return $this
+     * @param int $port Port
+     * @return HostConfiguration
      */
     public function setPort($port)
     {
@@ -64,8 +69,8 @@ class HostConfiguration
     }
 
     /**
-     * @param string $password
-     * @return $this
+     * @param string $password Password
+     * @return HostConfiguration
      */
     public function setPassword($password)
     {

@@ -4,10 +4,15 @@ namespace Smt\FavoritesBundle\MergeStrategy;
 
 use Smt\FavoritesBundle\Entity\Track;
 
+/**
+ * Summarize rating
+ * @package Smt\FavoritesBundle\MergeStrategy
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class SumStrategy implements MergeStrategyInterface
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function merge(Track $source, Track $new)
     {
         $source

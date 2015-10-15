@@ -5,10 +5,16 @@ namespace Smt\FavoritesBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Bundle configuration
+ * @auto-generated
+ * @package Smt\FavoritesBundle\DependencyInjection
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class Configuration implements ConfigurationInterface
 {
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function getConfigTreeBuilder()
     {
         $tree = new TreeBuilder();

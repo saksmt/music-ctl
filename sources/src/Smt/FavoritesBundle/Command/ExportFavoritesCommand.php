@@ -12,8 +12,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command for export of favorites database
+ * @package Smt\FavoritesBundle\Command
+ * @author Kirill Saksin <kirillsaksin@yandex.ru>
+ */
 class ExportFavoritesCommand extends ContainerAwareCommand
 {
+    /** {@inheritdoc} */
     public function configure()
     {
         $this
@@ -24,6 +30,10 @@ class ExportFavoritesCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ShortVariable) $in
+     */
     public function execute(InputInterface $in, OutputInterface $out)
     {
         $stream = new StdOutStream($out);
