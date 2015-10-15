@@ -7,6 +7,7 @@ use Smt\Component\Console\Style\KernelStyle;
 use Smt\Component\Console\Test\VisualTest;
 use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
+use Smt\FavoritesBundle\Parser\OrderParser;
 use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  */
 class ListFavoritesCommand extends ContainerAwareCommand
 {
+
     /** {@inheritdoc} */
     public function configure()
     {
@@ -37,7 +39,12 @@ class ListFavoritesCommand extends ContainerAwareCommand
             ->addOption('display-saved', 'S', InputOption::VALUE_NONE, 'Display "saved" properties.')
             ->addOption('path', 'P', InputOption::VALUE_NONE, 'Display paths.')
             ->addOption('rating', 'r', InputOption::VALUE_NONE, 'Display ratings.')
-            ->addOption('order', 'o', InputOption::VALUE_REQUIRED, 'Order of tracks', 'popularity')
+            ->addOption('order', 'o', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Order of tracks', [
+                'popularity',
+                'artist',
+                'album',
+                'title',
+            ])
         ;
     }
 
@@ -55,7 +62,8 @@ class ListFavoritesCommand extends ContainerAwareCommand
         /** @var ObjectManager $manager */
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $repo = $manager->getRepository('SmtFavoritesBundle:Track');
-        $tracks = $repo->findLimited($in->getOption('page'), $in->getOption('limit'));
+        $parser = new OrderParser($in->getOption('order'));
+        $tracks = $repo->findLimited($in->getOption('page'), $in->getOption('limit'), $parser);
         if (empty($tracks)) {
             $out->info('No tracks on this page.');
             return;

@@ -4,6 +4,7 @@ namespace Smt\FavoritesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Smt\FavoritesBundle\Entity\Track;
+use Smt\FavoritesBundle\Parser\OrderParser;
 
 /**
  * Repository of tracks
@@ -16,18 +17,16 @@ class TrackRepository extends EntityRepository
      * Find with paging
      * @param int $page Page number
      * @param int $limit Records per page
+     * @param OrderParser $parser Order
      * @return Track[]
      */
-    public function findLimited($page, $limit)
+    public function findLimited($page, $limit, OrderParser $parser)
     {
         return $this->createQueryBuilder('t')
             ->select('t')
             ->setMaxResults($limit)
             ->setFirstResult(($page - 1) * $limit)
-            ->orderBy('t.rating', 'DESC')
-            ->addOrderBy('t.artist')
-            ->addOrderBy('t.album')
-            ->addOrderBy('t.title')
+            ->orderBy($parser->getQueryString('t'))
             ->getQuery()
             ->getResult()
         ;
