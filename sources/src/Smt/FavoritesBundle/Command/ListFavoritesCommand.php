@@ -63,6 +63,17 @@ class ListFavoritesCommand extends ContainerAwareCommand
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $repo = $manager->getRepository('SmtFavoritesBundle:Track');
         $parser = new OrderParser($in->getOption('order'));
+        if ($out->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $ordering = $parser->getOrderingBy();
+            if (count($ordering) === 1) {
+                $out->info(sprintf('Ordering by: <question>%s</question>', $ordering[0]));
+            } else {
+                $out
+                    ->info('Ordering by:')
+                    ->nestedList($parser->getOrderingBy(), 3)
+                ;
+            }
+        }
         $tracks = $repo->findLimited($in->getOption('page'), $in->getOption('limit'), $parser);
         if (empty($tracks)) {
             $out->info('No tracks on this page.');

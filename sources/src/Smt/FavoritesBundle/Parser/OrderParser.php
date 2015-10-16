@@ -9,18 +9,21 @@ namespace Smt\FavoritesBundle\Parser;
  */
 class OrderParser
 {
-    const ORDER_ASC = true;
-    const ORDER_DESC = false;
+    const ORDER_ASC = false;
+    const ORDER_DESC = true;
+    const DEFAULT_ORDER = 'popularity';
 
     /**
      * @var string[] Map of valid order definitions
      */
     private static $validOrders = [
-        'popularity' => ['rating', false],
-        'addition' => ['id', false],
+        'popularity' => ['rating', true],
+        'addition' => ['id', true],
+        'date' => ['id', false],
         'artist',
         'title',
         'album',
+        'id',
     ];
 
     /**
@@ -29,12 +32,20 @@ class OrderParser
     private $order;
 
     /**
+     * @var string[]
+     */
+    private $orderingBy = [];
+
+    /**
      * Constructor.
      * @param array $order Source order
      */
     public function __construct(array $order)
     {
         $this->order = $this->parseNatives($order);
+        if (empty($this->order)) {
+            $this->order = [$this->parse(self::DEFAULT_ORDER)];
+        }
     }
 
     /**
@@ -48,9 +59,17 @@ class OrderParser
             $alias .= '.';
         }
         foreach ($this->order as $order) {
-            $result[] = $alias . $order[0] . ($order[1] === self::ORDER_ASC ? 'ASC' : 'DESC');
+            $result[] = $alias . $order[0] . ' ' . ($order[1] === self::ORDER_ASC ? 'ASC' : 'DESC');
         }
-        return implode(',', $result);
+        return implode(', ', $result);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getOrderingBy()
+    {
+        return $this->orderingBy;
     }
 
     /**
@@ -67,7 +86,6 @@ class OrderParser
     /**
      * @param $order
      * @return array|null
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) It's used in array_map
      */
     private function parse($order)
     {
@@ -81,12 +99,26 @@ class OrderParser
         }
         $arrayOrder = null;
         if (in_array($order, self::$validOrders)) {
+            $this->addOrderBy($order, $reverse);
             $arrayOrder = [$order, $reverse];
         }
         if (isset(self::$validOrders[$order])) {
+            $this->addOrderBy($order, $reverse);
             $arrayOrder = self::$validOrders[$order];
-            $arrayOrder[1] ^= $reverse;
+            $arrayOrder[1] = boolval($arrayOrder[1] ^ $reverse);
         }
         return $arrayOrder;
+    }
+
+    /**
+     * @param string $order
+     * @param bool $reverse
+     */
+    private function addOrderBy($order, $reverse)
+    {
+        if ($reverse) {
+            $order = 'reversed ' . $order;
+        }
+        $this->orderingBy[] = $order;
     }
 }

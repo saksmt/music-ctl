@@ -26,7 +26,7 @@ class TrackRepository extends EntityRepository
             ->select('t')
             ->setMaxResults($limit)
             ->setFirstResult(($page - 1) * $limit)
-            ->orderBy($parser->getQueryString('t'))
+            ->add('orderBy', $parser->getQueryString('t'))
             ->getQuery()
             ->getResult()
         ;
