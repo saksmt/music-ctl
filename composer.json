@@ -11,6 +11,7 @@
     "symfony/property-access": "*",
     "symfony/yaml": "^2.7",
     "smt/symfony-console-styles": "~1",
-    "smt/streams": "~1"
+    "smt/streams": "~1",
+    "smt/pmpd": "dev-develop"
   }
 }

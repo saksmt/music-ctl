@@ -19,6 +19,7 @@ class ConfigurationsCompilerPass implements CompilerPassInterface
         $registryDefinition = $container->getDefinition('mpd.configuration.registry');
         $configurations = $container->findTaggedServiceIds('mpd.configuration');
         foreach ($configurations as $serviceId => $attributes) {
+            $container->setAlias('mpd.configuration.' . $attributes[0]['id'], $serviceId);
             $registryDefinition->addMethodCall('addConfiguration', [$attributes[0]['id'], $container->getDefinition($serviceId)]);
         }
     }

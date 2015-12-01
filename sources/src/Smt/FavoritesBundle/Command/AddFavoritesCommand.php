@@ -5,7 +5,7 @@ namespace Smt\FavoritesBundle\Command;
 use Smt\Component\Console\Style\GentooStyle;
 use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
-use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
+use Smt\Pmpd\Formatter\Impl\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,7 +54,7 @@ class AddFavoritesCommand extends ContainerAwareCommand
         /**
          * @var Track $track
          */
-        $track = $this->getContainer()->get('track.provider')->get();
+        $track = Track::fromMpd($this->getContainer()->get('mpd.client')->getCurrent());
         /**
          * @var ObjectManager $manager
          */
