@@ -2,8 +2,8 @@
 
 namespace Smt\MpdBundle\Registry;
 
-use Smt\MpdBundle\Configuration\HostConfiguration;
 use Smt\MpdBundle\Exception\ConfigurationNotFoundException;
+use Smt\Pmpd\Configuration\HostConfiguration;
 
 /**
  * Registry for host configurations

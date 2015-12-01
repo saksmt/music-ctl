@@ -20,7 +20,7 @@ abstract class AbstractEncoder implements EncoderInterface
         return [
             'album' => $track->getAlbum(),
             'artist' => $track->getArtist(),
-            'path' => $track->getPath(),
+            'path' => $track->getFile(),
             'title' => $track->getTitle(),
             'saved' => $track->isSaved(),
             'rating' => $track->getRating(),

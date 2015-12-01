@@ -5,8 +5,8 @@ namespace Smt\FavoritesBundle\Command;
 use Smt\Component\Console\Style\GentooStyle;
 use Smt\FavoritesBundle\Coder\EncoderInterface;
 use Smt\FavoritesBundle\Entity\Track;
-use AppBundle\Stream\FileStream;
-use AppBundle\Stream\StdOutStream;
+use Smt\Streams\FileStream;
+use Smt\Streams\SymfonyOutputStream;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,7 +36,7 @@ class ExportFavoritesCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $in, OutputInterface $out)
     {
-        $stream = new StdOutStream($out);
+        $stream = new SymfonyOutputStream($out);
         $out = new GentooStyle($out, $in);
         if ($in->hasOption('output') && $in->getOption('output') !== null) {
             $stream->redirect(FileStream::fromFilename($in->getOption('output')));

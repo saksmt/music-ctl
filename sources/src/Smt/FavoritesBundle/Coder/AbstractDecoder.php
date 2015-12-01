@@ -18,11 +18,11 @@ abstract class AbstractDecoder implements DecoderInterface
     protected function createTrack(array $data)
     {
         return (new Track())
+            ->setSaved($data['saved'])
+            ->setRating($data['rating'])
             ->setAlbum($data['album'])
             ->setArtist($data['artist'])
-            ->setPath($data['path'])
-            ->setTitle($data['title'])
-            ->setSaved($data['saved'])
-            ->setRating($data['rating']);
+            ->setFile($data['path'])
+            ->setTitle($data['title']);
     }
 }

@@ -4,5 +4,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="mpd.configuration.registry" class="Smt\MpdBundle\Registry\ConfigurationRegistry" />
+        <service id="mpd.connection.factory" class="Smt\Pmpd\Connection\ConnectionFactory"/>
+        <service id="mpd.connection"
+                 class="Smt\Pmpd\Connection\Connection"
+                 factory-service="mpd.connection.factory"
+                 factory-method="createConnection">
+            <argument type="service" id="mpd.configuration.default" />
+        </service>
+        <service id="mpd.client" class="Smt\Pmpd\Client\Impl\DefaultClient">
+            <argument type="service" id="mpd.connection" />
+        </service>
     </services>
 </container>

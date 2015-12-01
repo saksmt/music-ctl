@@ -8,7 +8,7 @@ use Smt\Component\Console\Test\VisualTest;
 use Smt\FavoritesBundle\Entity\Track;
 use Doctrine\Common\Persistence\ObjectManager;
 use Smt\FavoritesBundle\Parser\OrderParser;
-use Smt\TrackTagsBundle\Formatter\DefaultTrackFormatter;
+use Smt\Pmpd\Formatter\Impl\DefaultTrackFormatter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;

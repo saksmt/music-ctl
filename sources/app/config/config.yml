@@ -19,16 +19,6 @@ parameters:
     - assets
     - translation
 
-smt_mpd_mpc:
-  configuration:
-    id: default
-
-smt_track_tags:
-  factory:
-    target: Smt\FavoritesBundle\Entity\Track
-  provider:
-    default: mpc
-
 app:
   mpd:
     host: %mpd.host%

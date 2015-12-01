@@ -6,8 +6,6 @@ use AppBundle\AppBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Smt\FavoritesBundle\SmtFavoritesBundle;
 use Smt\MpdBundle\SmtMpdBundle;
-use Smt\MpdMpcBundle\SmtMpdMpcBundle;
-use Smt\TrackTagsBundle\SmtTrackTagsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -34,8 +32,6 @@ class Kernel extends BaseKernel
 
             new AppBundle(),
             new SmtMpdBundle(),
-            new SmtMpdMpcBundle(),
-            new SmtTrackTagsBundle(),
             new SmtFavoritesBundle(),
         ];
     }

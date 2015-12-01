@@ -3,7 +3,7 @@
 namespace Smt\FavoritesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
+use Smt\Pmpd\Entity\Impl\DefaultTrack;
 
 /**
  * Represents track
@@ -13,7 +13,7 @@ use Smt\TrackTagsBundle\Entity\AbstractTagsCollection;
  * @SuppressWarnings(PHPMD.ShortVariable) $id
  * @author Kirill Saksin <kirillsaksin@yandex.ru>
  */
-class Track extends AbstractTagsCollection
+class Track extends DefaultTrack
 {
     /**
      * @var int
@@ -103,6 +103,19 @@ class Track extends AbstractTagsCollection
         return $this;
     }
 
+    /** {@inheritdoc} */
+    public function getFile()
+    {
+        return $this->path;
+    }
+
+    /** {@inheritdoc} */
+    public function setFile($file)
+    {
+        $this->path = $file;
+        return $this;
+    }
+
     /**
      * @param bool $saved Whether user saved track
      * @return Track
@@ -119,5 +132,18 @@ class Track extends AbstractTagsCollection
     public function getId()
     {
         return $this->id;
+    }
+
+    public static function fromMpd(DefaultTrack $track)
+    {
+        return (new self())
+            ->setTrack($track->getTrack())
+            ->setTitle($track->getTitle())
+            ->setGenre($track->getGenre())
+            ->setFile($track->getFile())
+            ->setAlbum($track->getAlbum())
+            ->setArtist($track->getArtist())
+            ->setDate($track->getDate())
+        ;
     }
 }
